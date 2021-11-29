@@ -1,0 +1,11 @@
+---
+- import_tasks: preflight.yml
+
+- import_tasks: install.yml
+
+- name: Ensure query_exporter is enabled on boot
+  systemd:
+    daemon_reload: true
+    started: restarted
+    name: query_exporter
+    enabled: true

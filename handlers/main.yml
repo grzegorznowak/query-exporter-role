@@ -1,0 +1,7 @@
+---
+- name: restart query exporter
+  become: true
+  systemd:
+    daemon_reload: true
+    name: query_exporter
+    state: restarted

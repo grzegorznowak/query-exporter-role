@@ -1,0 +1,12 @@
+---
+query_exporter_binary_local_dir: ""
+query_exporter_version: 2.7.0
+query_exporter_web_listen_address: "0.0.0.0:9560"
+
+query_exporter_dsn: "exporter:password@(localhost:3306)/"
+
+query_exporter_my_cnf: ""
+
+query_exporter_collect: []
+
+query_exporter_no_collect: []
