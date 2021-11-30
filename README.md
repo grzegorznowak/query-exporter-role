@@ -23,6 +23,11 @@ Please add your use cases to the issue tracker and we will triage those as we go
 
 ## Integration Testing
 
+
+### CI pipeline
+
+CI ran against LXD on github runners for each meaningful commit and merge to the main branch 
+
 ### locally on LXD
 
 LXD should already be installed and configured.
