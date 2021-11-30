@@ -1,18 +1,18 @@
-# Query Exporter Role
+# Query Exporter Role for Ansible
 
 ![Ansible Lint](https://github.com/grzegorznowak/query-exporter-role/actions/workflows/lint.yml/badge.svg)
 ![CI build](https://github.com/grzegorznowak/query-exporter-role/actions/workflows/ci.yml/badge.svg)
 ![CD build](https://github.com/grzegorznowak/query-exporter-role/actions/workflows/cd.yml/badge.svg)
 
 
-Installs Query Exporter for Prometheus on Ubuntus as systemd service with Ansible
+Installs Query Exporter for Prometheus on Ubuntus as systemd
 
 ## Description
 
 Deploys [query exporter](https://github.com/albertodonato/query-exporter).
 
 Query Exporter has it's minimal requirement set to python 3.8. 
-Which limits the array of distroy it can be installed easily. 
+Which limits the array of distroy it can be installed on easily. 
 With the current release we're aiming for Unbuntus, to not over-complicate things initially. 
  
 ## Supported Distros
