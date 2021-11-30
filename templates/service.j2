@@ -1,0 +1,32 @@
+[Unit]
+Description=Query Exporter
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory={{ query_exporter_location }}
+ExecStart={{ query_exporter_runtime }}/start.sh
+
+PIDFile={{ query_exporter_pidfile }}
+TimeoutStopSec=0
+Restart=always
+User=root
+Group=root
+RuntimeDirectory=root
+RuntimeDirectoryMode=2755
+
+ExecStop=/bin/kill -s TERM $MAINPID
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+PrivateDevices=yes
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/log/
+ReadWriteDirectories=-/var/run/
+CapabilityBoundingSet=~CAP_SYS_PTRACE
+
+[Install]
+WantedBy=multi-user.target
+Alias=audit-app.service

@@ -1,0 +1,5 @@
+---
+service:
+  query_exporter:
+    enabled: true
+    running: true

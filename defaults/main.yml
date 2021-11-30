@@ -1,12 +1,87 @@
 ---
-query_exporter_binary_local_dir: ""
-query_exporter_version: 2.7.0
-query_exporter_web_listen_address: "0.0.0.0:9560"
 
-query_exporter_dsn: "exporter:password@(localhost:3306)/"
+query_exporter_sources: https://github.com/albertodonato/query-exporter.git
+# query_exporter_version: 2.7.0
+query_exporter_version: 1e97d1cfbf803f9f70747d248ce16ec58268849f
+query_exporter_port: 9560
+query_exporter_web_listen_address: "127.0.0.1"
 
-query_exporter_my_cnf: ""
+query_exporter_python: 3.8
+query_exporter_runtime: /var/query_exporter_runtime
+query_exporter_config_location: "{{ query_exporter_runtime }}/config"
 
-query_exporter_collect: []
+# make sure we cache-bust packages when version changes
+query_exporter_virtualenv: "{{ query_exporter_runtime }}/runtime_env_{{ query_exporter_version }}"
 
-query_exporter_no_collect: []
+query_exporter_location: /usr/src/query_exporter
+query_exporter_pidfile: /var/run/query_exporter.pid
+query_exporter_service_name: query_exporter
+query_exporter_service_file: "/lib/systemd/system/{{ query_exporter_service_name }}.service"
+
+# logging disabled by default, possible values are: CRITICAL, ERROR, WARNING, INFO, DEBUG
+query_exporter_logging_level: false
+
+# we use the original format of query exporter
+query_exporter_configuration:
+  databases: []
+  #    db1:
+  #      dsn: sqlite://[username:password][@host:port]/database[?option=value&...]
+  #      connect-sql:
+  #        - PRAGMA application_id = 123
+  #        - PRAGMA auto_vacuum = 1
+  #      labels:
+  #        region: us1
+  #        app: app1
+  #    db2:
+  #      dsn: sqlite://[username:password][@host:port]/database[?option=value&...]
+  #      keep-connected: false
+  #      labels:
+  #        region: us2
+  #        app: app1
+  #
+  metrics: []
+  #    metric1:
+  #      type: gauge
+  #      description: A sample gauge
+  #    metric2:
+  #      type: summary
+  #      description: A sample summary
+  #      labels: [l1, l2]
+  #      expiration: 24h
+  #    metric3:
+  #      type: histogram
+  #      description: A sample histogram
+  #      buckets: [10, 20, 50, 100, 1000]
+  #    metric4:
+  #      type: enum
+  #      description: A sample enum
+  #      states: [foo, bar, baz]
+  #
+  queries: []
+  #    query1:
+  #      interval: 5
+  #      databases: [db1]
+  #      metrics: [metric1]
+  #      sql: SELECT random() / 1000000000000000 AS metric1
+  #    query2:
+  #      interval: 20
+  #      timeout: 0.5
+  #      databases: [db1, db2]
+  #      metrics: [metric2, metric3]
+  #      sql: |
+  #        SELECT abs(random() / 1000000000000000) AS metric2,
+  #               abs(random() / 10000000000000000) AS metric3,
+  #               "value1" AS l1,
+  #               "value2" AS l2
+  #    query3:
+  #      schedule: "*/5 * * * *"
+  #      databases: [db2]
+  #      metrics: [metric4]
+  #      sql: |
+  #        SELECT value FROM (
+  #          SELECT "foo" AS metric4 UNION
+  #          SELECT "bar" AS metric3 UNION
+  #          SELECT "baz" AS metric4
+  #        )
+  #        ORDER BY random()
+  #        LIMIT 1

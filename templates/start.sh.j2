@@ -1,0 +1,7 @@
+#!/bin/bash
+. {{ query_exporter_virtualenv }}/bin/activate && \
+cd {{ query_exporter_location }} && \
+query-exporter {{ query_exporter_config_location }}/config.yaml \
+-H {{ query_exporter_web_listen_address }} -p {{ query_exporter_port }} {% if query_exporter_logging_level != false %} \
+-L{{ query_exporter_logging_level }}
+{% endif %}

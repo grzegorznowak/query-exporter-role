@@ -1,0 +1,38 @@
+---
+
+- name: Converge Query Exporters
+  hosts: all
+  vars:
+    test_db_name: "db1"
+    test_db_user: "root"
+    test_db_password: "toor"
+
+  roles:
+    # test against a meningful mysql platform
+    - role: geerlingguy.mysql
+      become: true
+      mysql_root_password: "{{ test_db_password }}"
+      mysql_databases:
+        - name: "{{ test_db_name }}"
+          encoding: latin1
+          collation: latin1_general_ci
+    - role: query-exporter-role
+      query_exporter_web_listen_address: "0.0.0.0"
+      query_exporter_logging_level: DEBUG
+      query_exporter_configuration:
+        databases:
+          db1:
+            dsn: "mysql://{{ test_db_user }}:{{ test_db_password }}@localhost:3306/{{ test_db_name }}"
+            labels:
+              region: test_region
+              app: test_app
+        metrics:
+          metric1:
+            type: gauge
+            description: A sample gauge
+        queries:
+          query1:
+            interval: 5
+            databases: ["{{ test_db_name }}"]
+            metrics: [metric1]
+            sql: SELECT 4321 AS metric1

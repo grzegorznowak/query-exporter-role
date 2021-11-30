@@ -1,0 +1,13 @@
+---
+
+- name: Create the runtime dir
+  file:
+    path: "{{ query_exporter_config_location }}"
+    state: directory
+    mode: '0755'
+
+- name: Materialize Query Exporter's config
+  template:
+    src: config.yaml.j2
+    dest: "{{ query_exporter_config_location }}/config.yaml"
+    mode: "755"

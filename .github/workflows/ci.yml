@@ -25,7 +25,6 @@ jobs:
       - name: Molecule
         uses: gofrolist/molecule-action@v2
         with:
-          molecule_options: --base-config molecule/default/base.yml
           molecule_command: test
           molecule_args: --scenario-name ${{ matrix.scenario }}
         env:

@@ -1,72 +1,99 @@
 ---
-- name: Create the Query Exporter group
-  group:
-    name: "{{ __query_exporter_group }}"
+- name: Assert usage of systemd as an init system
+  assert:
+    that: ansible_service_mgr == 'systemd'
+    msg: "This role only works with systemd"
+
+- name: Get systemd version
+  command: systemctl --version
+  changed_when: false
+  check_mode: false
+  register: __systemd_version
+  tags:
+    - skip_ansible_lint
+
+- name: Install GnuPG for deadsnakes apt
+  apt:
+    update_cache: true
+    cache_valid_time: 1800
+    name:
+      - gnupg
     state: present
-    system: true
 
-- name: Create the Query Exporter user
-  user:
-    name: "{{ __query_exporter_user }}"
-    groups: "{{ __query_exporter_group }}"
-    append: true
-    shell: /usr/sbin/nologin
-    system: true
-    createhome: false
-    home: /
+- name: Add repo to install other python versions
+  apt_repository:
+    repo: ppa:deadsnakes/ppa
+  register: deadsnakes_repo_result
 
-- block:
-    - name: Download query_exporter binary to local folder
-      become: false
-      get_url:
-        url: "https://github.com/prometheus/query_exporter/releases/download/v{{ query_exporter_version }}/query_exporter-{{ query_exporter_version }}.linux-{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}.tar.gz"
-        dest: "/tmp/query_exporter-{{ query_exporter_version }}.linux-{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}.tar.gz"
-        checksum: "sha256:{{ __query_exporter_checksum }}"
-      register: _download_binary
-      until: _download_binary is succeeded
-      retries: 5
-      delay: 2
-      delegate_to: localhost
-      check_mode: false
+- name: Update cache when new source is added
+  apt:
+    update_cache: true
+  when: deadsnakes_repo_result.changed
+  tags:
+    - skip_ansible_lint  # we do want to have this reloaded here and now
 
-    - name: Unpack query_exporter binary
-      become: false
-      unarchive:
-        src: "/tmp/query_exporter-{{ query_exporter_version }}.linux-{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}.tar.gz"
-        dest: "/tmp"
-        creates: "/tmp/query_exporter-{{ query_exporter_version }}.linux-{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}/query_exporter"
-      delegate_to: localhost
-      check_mode: false
+- name: Install dependencies
+  apt:
+    update_cache: true
+    cache_valid_time: 1800
+    name:
+      - "python{{ query_exporter_python }}"
+      - "python{{ query_exporter_python }}-dev"
+      - build-essential
+      - curl
+      - default-libmysqlclient-dev
+      - libpq-dev
+      - unixodbc-dev
+      - unzip
+      - python3
+      - virtualenv
+      - python3-pip
+      - git
+    state: present
 
-    - name: Propagate query_exporter binaries
-      copy:
-        src: "/tmp/query_exporter-{{ query_exporter_version }}.linux-{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}/query_exporter"
-        dest: "/usr/local/bin/query_exporter"
-        mode: 0755
-        owner: root
-        group: root
-      notify:
-        - restart query exporter
-      when: not ansible_check_mode
-  when: query_exporter_binary_local_dir | length == 0
+- name: Create the application dir
+  git:
+    repo: "{{ query_exporter_sources }}"
+    dest: "{{ query_exporter_location }}"
+    version: "{{ query_exporter_version }}"
+    force: true
 
-- name: propagate locally distributed query_exporter binary
-  copy:
-    src: "{{ query_exporter_binary_local_dir }}/query_exporter"
-    dest: "/usr/local/bin/query_exporter"
-    mode: 0755
-    owner: root
-    group: root
-  when: query_exporter_binary_local_dir | length > 0
-  notify: restart query exporter
-
-- name: Copy the query_exporter systemd service file
+- name: Materialize pip requirements across
   template:
-    src: query_exporter.service.j2
-    dest: /etc/systemd/system/query_exporter.service
-    owner: root
-    group: root
-    mode: 0644
-  no_log: "{{ not lookup('env', 'ANSIBLE_DEBUG') | bool }}"
-  notify:
-    - restart query exporter
+    src: requirements.txt.j2
+    dest: "{{ query_exporter_runtime }}/requirements.txt"
+    mode: "755"
+
+- name: install runtime pip dependencies
+  pip:
+    virtualenv: "{{ query_exporter_virtualenv }}"
+    virtualenv_python: "python{{ query_exporter_python }}"
+    requirements: "{{ query_exporter_runtime }}/requirements.txt"
+
+- name: Copy starter file template
+  template:
+    src: start.sh.j2
+    dest: "{{ query_exporter_runtime }}/start.sh"
+    mode: "u+x,g+x,o+x"
+  notify: Restart query exporter
+
+- name: Copy service file template
+  template:
+    src: service.j2
+    dest: "{{ query_exporter_service_file }}"
+    mode: "755"
+  notify: Restart query exporter
+
+# make sure the service has actually rebooted at this point
+- name: Flush Handlers.
+  meta: flush_handlers
+
+- name: Enable the custom service
+  service:
+    name: "{{ query_exporter_service_name }}.service"
+    enabled: true
+
+- name: Start the custom service
+  service:
+    name: "{{ query_exporter_service_name }}.service"
+    state: started
