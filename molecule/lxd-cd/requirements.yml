@@ -1,0 +1,6 @@
+---
+
+- src: geerlingguy.mysql
+  version: 3.3.2
+
+- src: grzegorznowak.query_exporter

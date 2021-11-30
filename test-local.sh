@@ -13,4 +13,4 @@ pip install -r local-requirements.txt
 python -m pytest tests
 
 ansible-lint
-molecule test -s lxd
+molecule test -s lxd-ci

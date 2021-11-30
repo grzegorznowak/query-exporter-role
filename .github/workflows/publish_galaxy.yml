@@ -11,6 +11,7 @@ on:
 jobs:
   publish_galaxy:
     runs-on: ubuntu-latest
+    environment: production
     name: Publish role to Ansible Galaxy
     steps:
       - name: Checkout

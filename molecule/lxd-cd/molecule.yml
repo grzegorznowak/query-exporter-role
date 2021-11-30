@@ -41,9 +41,15 @@ provisioner:
     lint:
         name: ansible-lint
     name: ansible
+    playbooks:   # DRY playbooks by reusing what we can from the other scenario
+        prepare: ../lxd-ci/prepare.yml
+        create: ../lxd-ci/create.yml
+        converge: ../lxd-ci/playbook.yml
+        destroy: ../lxd-ci/destroy.yml
+        verify: ../lxd-ci/verify.yml
 
 scenario:
-    name: local-lxd
+    name: lxd-cd
 
 verifier:
     directory: ../../tests/integration
