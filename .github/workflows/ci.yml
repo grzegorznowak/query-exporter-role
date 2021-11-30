@@ -1,6 +1,6 @@
 ---
 
-name: CI Ops
+name: CI
 
 on:
   workflow_run:
