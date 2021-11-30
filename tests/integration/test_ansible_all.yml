@@ -2,18 +2,18 @@
 
 - shell: >-
     netstat -tulpn | grep {{ query_exporter_port }} | awk '{print $7}' | cut -d'/' -f1
-  register: query_exporer_process
+  register: query_exporter_process
 
 - assert:
     that:
-      - query_exporer_process.stdout != ""  # port materialized
-      - query_exporer_process.stderr == ""  # and no error
-      - query_exporer_process.rc == 0
+      - query_exporter_process.stdout != ""  # port materialized
+      - query_exporter_process.stderr == ""  # and no error
+      - query_exporter_process.rc == 0
 
 - name: Test Integration | Service uptime keeping
   block:
     - name: Test Integration | sneakily kill the service
-      shell: "kill -9 {{ query_exporer_process.stdout }}"
+      shell: "kill -9 {{ query_exporter_process.stdout }}"
 
     - name: Test Integration | wait for systemd to restart the service
       wait_for:
