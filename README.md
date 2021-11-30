@@ -1,5 +1,10 @@
 # Query Exporter Role
 
+![Ansible Lint](https://github.com/grzegorznowak/query-exporter-role/actions/workflows/lint.yml/badge.svg)
+![CI Sources Integration](https://github.com/grzegorznowak/query-exporter-role/actions/workflows/ci.yml/badge.svg)
+![CI Binary Integration](https://github.com/grzegorznowak/query-exporter-rolee/actions/workflows/cd.yml/badge.svg)
+
+
 Installs Query Exporter for Prometheus on Ubuntus as systemd service with Ansible
 
 ## Description
