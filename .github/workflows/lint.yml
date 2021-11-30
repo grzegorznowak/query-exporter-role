@@ -1,0 +1,29 @@
+---
+
+name: Ansible Lint
+
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  # do not trigger for documentation changes
+  push:
+    branches: [ '**' ]
+    paths-ignore:
+      - 'README.md'
+      - meta/*
+      - .github
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - meta/*
+      - .github
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: docker://lpenz/ansible-lint:905d4ae
