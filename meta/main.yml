@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: albertodonato
+  author: wocozon
   description: Prometheus Query Exporter
   role_name: query_exporter
   license: GPL-3.0

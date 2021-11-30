@@ -2,6 +2,6 @@
 - hosts: all
   any_errors_fatal: true
   roles:
-    - ansible-query_exporter
+    - query-exporter-role
   vars:
     mysqld_exporter_dsn: "root@(localhost:3306)/"

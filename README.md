@@ -1,4 +1,6 @@
-# Ansible Role: query exporter
+# Query Exporter Role
+
+Installs Query Exporter for Prometheus as systemd service with ansible
 
 [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
 [![GitHub tag](https://img.shields.io/github/tag/cloudalchemy/ansible-mysqld_exporter.svg)](https://github.com/grzegorznowak/query-exporter-role/tags)
