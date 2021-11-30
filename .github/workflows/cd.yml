@@ -42,4 +42,3 @@ jobs:
         env:
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_EPHEMERAL_DIRECTORY: /tmp/molecule_ephemeral/${{ github.run_id }}
-
