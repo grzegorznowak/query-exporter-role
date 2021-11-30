@@ -38,8 +38,10 @@ jobs:
       - name: Create molecule cache foder
         run: mkdir -p /tmp/molecule_ephemeral/${{ github.run_id }}
 
-      - name: Test with molecule
+      - name: Init LXD
         uses: bonddim/action-lxd-init@v1
+
+      - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
         env:
           ANSIBLE_FORCE_COLOR: '1'
