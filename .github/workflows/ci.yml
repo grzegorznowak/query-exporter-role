@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         scenario:
-          - default
+          - local-lxd
     steps:
       - uses: actions/checkout@v2
 
@@ -28,17 +28,18 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ env.pythonLocation }}-${{ hashFiles('test-requirements.txt') }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('local-requirements.txt') }}
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r test-requirements.txt
+          python -m pip install -r local-requirements.txt
 
       - name: Create molecule cache foder
         run: mkdir -p /tmp/molecule_ephemeral/${{ github.run_id }}
 
       - name: Test with molecule
+        uses: bonddim/action-lxd-init@v1
         run: molecule test --scenario-name ${{ matrix.scenario }}
         env:
           ANSIBLE_FORCE_COLOR: '1'
