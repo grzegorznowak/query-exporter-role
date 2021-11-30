@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         scenario:
-          - local-lxd
+          - lxd
     steps:
       - uses: actions/checkout@v2
 
