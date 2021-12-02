@@ -26,8 +26,25 @@ Please add your use cases to the issue tracker and we will triage those as we go
 * 20.04
 * 18.04
 
-## Integration Testing
+## Installation
 
+one of:
+* `ansible-galaxy install grzegorznowak.query_exporter`
+* clone the repo directly
+
+## Example playbook
+
+basic example
+
+```YAML
+- name: Converge Query Exporters
+  hosts: all
+  
+  roles:
+    - grzegorznowak.query_exporter
+```     
+
+## Integration Testing
 
 ### CI pipeline
 
@@ -42,7 +59,6 @@ Trigger the full suite with `./test-local.sh`
 ## Requirements
 
 - Ansible >= 2.7 (It might work on previous versions, but we cannot guarantee it)
-
 
 ## License
 
