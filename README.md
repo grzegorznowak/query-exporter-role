@@ -11,9 +11,8 @@ Installs Query Exporter for Prometheus on Ubuntus as systemd
 
 Deploys [query exporter](https://github.com/albertodonato/query-exporter).
 
-Query Exporter has it's minimal requirement set to python 3.8. 
-Which limits the array of distros it can be installed on easily. 
-With the current release we're aiming for Unbuntus, to not over-complicate things initially. 
+Query Exporter has it's minimal requirement set to python 3.8. which limits the array of distros it can be installed on easily. 
+To not over-complicate things at this point we're targetting most recent Ubuntu distros only. 
  
 ## Supported Distros
 
