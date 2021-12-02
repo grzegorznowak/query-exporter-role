@@ -8,4 +8,4 @@
     - role: geerlingguy.mysql
       become: true
 
-    - role: query-exporter-role
+    - role: grzegorznowak.query_exporter

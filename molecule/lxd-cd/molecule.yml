@@ -41,10 +41,12 @@ provisioner:
     lint:
         name: ansible-lint
     name: ansible
+    inventory:
+        links:
+            group_vars: ../../inventory/molecule/group_vars/
     playbooks:   # DRY playbooks by reusing what we can from the other scenario
         prepare: ../lxd-ci/prepare.yml
         create: ../lxd-ci/create.yml
-        converge: ../lxd-ci/playbook.yml
         destroy: ../lxd-ci/destroy.yml
         verify: ../lxd-ci/verify.yml
 

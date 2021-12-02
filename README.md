@@ -32,9 +32,37 @@ one of:
 * `ansible-galaxy install grzegorznowak.query_exporter`
 * clone the repo directly
 
-## Example playbook
+## Usage
 
-basic example
+### Adjustable Defaults
+
+For additional and low level configuration options head on to the `default.yml` file directly.
+Those are the vars you might want to fiddle with normally: 
+```
+query_exporter_sources: https://github.com/albertodonato/query-exporter.git
+
+# query_exporter_version: 2.7.0  unfortunatelly the last tag doesn't pass integration tests
+# we use commit that we know is passing our test suite:
+query_exporter_version: 1e97d1cfbf803f9f70747d248ce16ec58268849f
+
+query_exporter_port: 9560
+query_exporter_web_listen_address: "127.0.0.1"
+
+# logging disabled by default, possible values are: CRITICAL, ERROR, WARNING, INFO, DEBUG
+query_exporter_logging_level: false
+
+# we use the original format of query exporter:
+# https://github.com/albertodonato/query-exporter#configuration-file-format
+# Additional inspiration can be found under in our tests' inventory file: 
+# inventory/molecule/group_vars/all.yml:17
+
+query_exporter_configuration:
+  databases: []
+  metrics: []
+  queries: []
+```
+
+### Example with the role from Galaxy
 
 ```YAML
 - name: Converge Query Exporters

@@ -41,7 +41,9 @@ provisioner:
     lint:
         name: ansible-lint
     name: ansible
-
+    inventory:
+        links:
+            group_vars: ../../inventory/molecule/group_vars/
 scenario:
     name: lxd-ci
 

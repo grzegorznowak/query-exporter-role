@@ -1,7 +1,8 @@
 ---
 
 query_exporter_sources: https://github.com/albertodonato/query-exporter.git
-# query_exporter_version: 2.7.0
+# query_exporter_version: 2.7.0  unfortunatelly the last tag doesn't pass integration tests
+# we use commit that we know is passing our test suite:
 query_exporter_version: 1e97d1cfbf803f9f70747d248ce16ec58268849f
 query_exporter_port: 9560
 query_exporter_web_listen_address: "127.0.0.1"
@@ -21,7 +22,8 @@ query_exporter_service_file: "/lib/systemd/system/{{ query_exporter_service_name
 # logging disabled by default, possible values are: CRITICAL, ERROR, WARNING, INFO, DEBUG
 query_exporter_logging_level: false
 
-# we use the original format of query exporter
+# we use the original format of query exporter:
+# https://github.com/albertodonato/query-exporter#configuration-file-format
 query_exporter_configuration:
   databases: []
   #    db1:
