@@ -23,4 +23,3 @@
     - query_exporter_config_result.changed
   tags:
     - skip_ansible_lint
-
