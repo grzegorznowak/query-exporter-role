@@ -84,10 +84,6 @@
     mode: "755"
   notify: Restart query exporter
 
-# make sure the service has actually rebooted at this point
-- name: Flush Handlers.
-  meta: flush_handlers
-
 - name: Enable the custom service
   service:
     name: "{{ query_exporter_service_name }}.service"
@@ -97,3 +93,7 @@
   service:
     name: "{{ query_exporter_service_name }}.service"
     state: started
+
+# make sure the service has actually (re-)booted at this point
+- name: Flush Handlers.
+  meta: flush_handlers

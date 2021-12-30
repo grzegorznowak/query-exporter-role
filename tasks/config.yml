@@ -11,15 +11,4 @@
     src: config.yaml.j2
     dest: "{{ query_exporter_config_location }}/config.yaml"
     mode: "755"
-  register: query_exporter_config_result
-
-- name: Query exporter service restart
-  systemd:
-    daemon_reload: false
-    name: "{{ query_exporter_service_name }}"
-    state: restarted
-  when:
-    - query_exporter_config_result is defined
-    - query_exporter_config_result.changed
-  tags:
-    - skip_ansible_lint
+  notify: Restart query exporter
