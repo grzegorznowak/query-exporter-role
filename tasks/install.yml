@@ -34,8 +34,7 @@
 
 - name: Install dependencies
   apt:
-    update_cache: true
-    cache_valid_time: 1800
+    update_cache: false
     name:
       - "python{{ query_exporter_python }}"
       - "python{{ query_exporter_python }}-dev"
@@ -63,12 +62,14 @@
     src: requirements.txt.j2
     dest: "{{ query_exporter_runtime }}/requirements.txt"
     mode: "755"
+  register: pip_requirements_result
 
-- name: install runtime pip dependencies
+- name: install runtime pip dependencies (if changed)
   pip:
     virtualenv: "{{ query_exporter_virtualenv }}"
     virtualenv_python: "python{{ query_exporter_python }}"
     requirements: "{{ query_exporter_runtime }}/requirements.txt"
+  when: pip_requirements_result.changed
 
 - name: Copy starter file template
   template:
