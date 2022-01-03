@@ -70,6 +70,8 @@
     virtualenv_python: "python{{ query_exporter_python }}"
     requirements: "{{ query_exporter_runtime }}/requirements.txt"
   when: pip_requirements_result.changed
+  tags:
+    - skip_ansible_lint  # we do want to have this trigger conditionally in this exact moment
 
 - name: Copy starter file template
   template:
